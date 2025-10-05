@@ -1,6 +1,5 @@
 # Khatri-Rao Clustering
 
-
 This code implements the Khatri-Rao clustering algorithms introduced in the paper "Succinct clustering through Khatri-Rao operators". 
 The code is written in Python 3. 
 
@@ -19,12 +18,13 @@ Khatri-Rao clustering is a paradigm extending existing prototype-based clusterin
 
 ## 📁 Repository contents 
 - `KathriRaokMeans/`
-   - kr_k_means.py: implements the Khatri Rao k-means algorithm. 
-   - kr_k_means_utils.py: utilities for the Khatri Rao k-means algorithm 
+   - `kr_k_means.py`: implements the Khatri-Rao k-means algorithm. 
+   - `kr_k_means_utils.py`: utilities for the Khatri-Rao k-means algorithm.
 
 - `KhatriRaoDeepClustering/`
-  - kr_dkm.py: implements the Khatri Rao DKM deep clustering algorithm. 
-  - kr_idec.py: implements the Khatri Rao IDEC deep clustering algorithm.  
+  - `kr_dkm.py`: implements the Khatri-Rao DKM deep clustering algorithm. 
+  - `kr_idec.py`: implements the Khatri-Rao IDEC deep clustering algorithm.
+  - `deep_clustering_utils.py`: utilities for Khatri-Rao deep clustering algorithms
 
 
 ## ✏️ Minimal example
