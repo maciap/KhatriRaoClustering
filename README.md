@@ -24,7 +24,7 @@ Khatri-Rao clustering is a paradigm extending existing prototype-based clusterin
 - `KhatriRaoDeepClustering/`
   - `kr_dkm.py`: implements the Khatri-Rao DKM deep clustering algorithm. 
   - `kr_idec.py`: implements the Khatri-Rao IDEC deep clustering algorithm.
-  - `deep_clustering_utils.py`: utilities for Khatri-Rao deep clustering algorithms
+  - `deep_clustering_utils.py`: utilities for Khatri-Rao deep clustering algorithms.
 
 
 ## ✏️ Minimal example
