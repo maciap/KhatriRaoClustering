@@ -1,6 +1,6 @@
 # Khatri-Rao Clustering
 
-This code implements the Khatri-Rao clustering algorithms introduced in the paper "Succinct clustering through Khatri-Rao operators". 
+This code implements the Khatri-Rao clustering algorithms introduced in the paper "Khatri-Rao Clustering for Data Summarization". 
 The code is written in Python 3. 
 
 Khatri-Rao clustering is a paradigm extending existing prototype-based clustering algorithms to achieve higher compression rates and Khatri-Rao clustering algorithms find more concise yet equally accurate dataset reparameterization compared to standard clustering algorithms. 
