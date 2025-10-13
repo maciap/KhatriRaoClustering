@@ -1,17 +1,19 @@
 import copy 
 import numpy as np 
-import kr_k_means
+import sys 
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from KathriRaokMeans import kr_k_means
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import normalized_mutual_info_score as nmi, adjusted_rand_score as ari
 from clustpy.metrics import unsupervised_clustering_accuracy as acc
-import os
 import pickle
 from collections import defaultdict
 
 
 def makerealdata(n,c,m,noise=0.0, zeroone=False):
-     '''
+    '''
     Generate a synthetic matrix factorization dataset (D = W @ H).
 
     Parameters
@@ -41,7 +43,7 @@ def makerealdata(n,c,m,noise=0.0, zeroone=False):
     return W,H,D
 
 def makerealdata_v2(r,m):
-     '''
+    '''
     Generate a random real-valued matrix using a standard normal distribution.
 
     Parameters
@@ -83,7 +85,7 @@ def half_kron_rows(mat1, mat2):
             
 
 def create_idx_map(r1,r2): 
-     '''
+    '''
     Create a mapping between 2D index pairs and their flattened linear index.
 
     Parameters
@@ -210,7 +212,7 @@ class PP_KRkmeans():
         -------
         inertia (float) 
         ''' 
-    	return np.sum(np.power((self.estimated_data - self.D),2))
+        return np.sum(np.power((self.estimated_data - self.D),2))
 
 
     def decompose(self): 
@@ -222,7 +224,7 @@ class PP_KRkmeans():
         [B_estimate, B1, B2] : (list) list containing centroids and protocentroids 
         
         
-         '''
+        '''
         B_estimate, B1, B2 = coordinate_descent_half_kron(self.centroids, r1=self.r1, r2= self.r2,  T = self.n_epochs)
         self.estimated_centroids = B_estimate 
         

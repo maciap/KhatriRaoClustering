@@ -9,10 +9,8 @@ from collections.abc import Callable
 from clustpy.deep.dkm import _DKM_Module, _dkm_get_probs, _get_default_alphas
 import os 
 import sys 
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-dkm_path = os.path.join(parent_dir, 'KathriRaokMeans')
-sys.path.append(dkm_path)
-from kr_k_means import KrKMeans
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from KathriRaokMeans.kr_k_means import KrKMeans
 from clustpy.utils import plot_with_transformation
 import tqdm
 

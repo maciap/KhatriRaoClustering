@@ -1,10 +1,12 @@
 import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from KhatriRaoDeepClustering.deep_clustering_utils import HadamardAutoencoder
 import numpy as np 
 import torch.nn.functional as F
 import torch
 from clustpy.deep import detect_device 
 from clustpy.deep.neural_networks import FeedforwardAutoencoder
-from hadamard_autoencoder import HadamardAutoencoder
 from run_experiments_utils import closest_factors, shift_to_zero, load_data
 from KRDeepExperimentsLib import run_deep_clustering_experiment
 

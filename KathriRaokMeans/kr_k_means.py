@@ -2,7 +2,7 @@ import numpy as np
 import random 
 from sklearn.preprocessing import StandardScaler
 import warnings
-from kr_k_means_utils import find_current_centers, compute_loss, compute_centroid_movement
+from .kr_k_means_utils import find_current_centers, compute_loss, compute_centroid_movement
 from scipy.spatial.distance import cdist
 
 class KrKMeans(): 

@@ -6,8 +6,9 @@ import numpy as np
 import time
 import torch
 from clustpy.deep import IDEC, detect_device, DKM 
-from KhatriRaoDeepClustering.khatrirao_dkm import KR_DKM 
-from KhatriRaoDeepClustering.khatrirao_dec import KR_IDEC 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from KhatriRaoDeepClustering.kr_dkm import KR_DKM 
+from KhatriRaoDeepClustering.kr_idec import KR_IDEC 
 from run_experiments_utils import compute_inertia
 
 
@@ -50,7 +51,7 @@ def run_deep_clustering_experiment(algo_name,  n_clusters1, n_clusters2, had_ae,
                 batch_size=batch_size,
                 clustering_loss_weight=1
             )
-        elif algo_name == "IDEC"
+        elif algo_name == "IDEC": 
             algo = IDEC(
                 n_clusters_max,
                 neural_network=ae,

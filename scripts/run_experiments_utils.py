@@ -15,6 +15,8 @@ from clustpy.data import (
     load_cmu_faces, 
     load_olivetti_faces
 )
+import clustbench
+
 
 def stratified_subsample(X: np.ndarray, L: np.ndarray, n_samples: int = 5000, random_state: int = 42):
     """
