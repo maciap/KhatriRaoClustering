@@ -45,7 +45,9 @@ print(f"The inertia of the clustering solution with two sets of {n_protocentroid
 ## 📚 Datasets
 
 The datasets used in the experiments are available through the following open-source Python libraries:
+- **[scikit-learn](https://scikit-learn.org/stable/datasets.html)**
 - **[ClustPy](https://clustpy.readthedocs.io/)** 
 - **[ClustBench](https://clustering-benchmarks.gagolewski.com/)** 
 
-
+All ClustPy datasets are fetched automatically at runtime.
+On the other hand, for the <small><b>r15</b></small> and <small><b>chameleon</b></small> datasets that are available in ClustBench, one needs to [download](https://github.com/gagolews/clustering-data-v1/releases/tag/v1.1.0/) the Benchmark Suite (v1.1.0) repository onto their own disk and place it within the `Scripts/` folder.  
