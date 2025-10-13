@@ -15,7 +15,6 @@ Khatri-Rao clustering is a paradigm extending existing prototype-based clusterin
   ```
 
 
-
 ## 📁 Repository contents 
 - `KathriRaokMeans/`
    - `kr_k_means.py`: implements the Khatri-Rao k-means algorithm. 
@@ -26,6 +25,12 @@ Khatri-Rao clustering is a paradigm extending existing prototype-based clusterin
   - `kr_idec.py`: implements the Khatri-Rao IDEC deep clustering algorithm.
   - `deep_clustering_utils.py`: utilities for Khatri-Rao deep clustering algorithms.
 
+- `Scripts/`
+  - `run_k_means_experiments.py`: run experiments comparing standard and Khatri-Rao k-means clustering.
+  - `run_deep_clustering_experiments.py`: run experiments comparing standard and Khatri-Rao deep clustering.
+  - `run_experiments_utils.py`: general utilities for all experiments.
+  - `KRkmeansExperimentsLib.py`: utilities for k-means experiments.
+  - `KRDeepExperimentsLib.py`: utilities for deep clustering experiments.
 
 ## ✏️ Minimal example
 ```python
@@ -36,5 +41,11 @@ kr_kmeans = KrKMeans(X, n_protocentroids_set_1, n_protocentroids_set_2, operator
 _, kr_k_means_loss, _ = kr_kmeans.fit(n_iter=100, init_type="random", th_movement=0.0001)
 print(f"The inertia of the clustering solution with two sets of {n_protocentroids_set_1} and {n_protocentroids_set_2} protocentroids is {kr_k_means_loss}")
 ```
+
+## 📚 Datasets
+
+The datasets used in the experiments are available through the following open-source Python libraries:
+- **[ClustPy](https://clustpy.readthedocs.io/)** 
+- **[ClustBench](https://clustering-benchmarks.gagolewski.com/)** 
 
 
