@@ -14,7 +14,7 @@ from run_experiments_utils import compute_inertia
 
 
 
-def run_deep_clustering_experiment(algo_name,  n_clusters1, n_clusters2, had_ae, ae, nrep, batch_size): 
+def run_deep_clustering_experiment(X,L,algo_name,  n_clusters1, n_clusters2, had_ae, ae, nrep, batch_size): 
     '''
     Run deep clustering experiment 
 

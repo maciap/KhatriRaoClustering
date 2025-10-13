@@ -33,7 +33,6 @@ if __name__ == "__main__":
     else: 
         X = X / np.max(X)
 
-
     ''' train full autoencoder ''' 
     device = detect_device()    
     ae = FeedforwardAutoencoder(layers=[X.shape[1], 1024, 512, 256, embedding_size]).to(device)
@@ -71,14 +70,13 @@ if __name__ == "__main__":
     total_params_standard_clustering = total_params_ae + full_centroid_params
 
     # KR IDEC
-    best_metrics_kr_dec = run_deep_clustering_experiment("KR IDEC",  n_clusters1,  n_clusters2, had_ae, ae,  nrep, batch_size)
+    best_metrics_kr_dec = run_deep_clustering_experiment(X,L,"KR IDEC",  n_clusters1,  n_clusters2, had_ae, ae,  nrep, batch_size)
 
     # IDEC  
-    best_metrics_idec = run_deep_clustering_experiment("IDEC",  n_clusters1,  n_clusters2, had_ae, ae,  nrep, batch_size)
+    best_metrics_idec = run_deep_clustering_experiment(X,L,"IDEC",  n_clusters1,  n_clusters2, had_ae, ae,  nrep, batch_size)
 
     # KR DKM 
-    best_metrics_kr_dkm = run_deep_clustering_experiment("KR DKM",  n_clusters1,  n_clusters2, had_ae, ae,  nrep, batch_size)
+    best_metrics_kr_dkm = run_deep_clustering_experiment(X,L,"KR DKM",  n_clusters1,  n_clusters2, had_ae, ae,  nrep, batch_size)
 
     # DKM 
-    best_metrics_dkm = run_deep_clustering_experiment("DKM",  n_clusters1,  n_clusters2, had_ae, ae,  nrep, batch_size)
-
+    best_metrics_dkm = run_deep_clustering_experiment(X,L,"DKM",  n_clusters1,  n_clusters2, had_ae, ae,  nrep, batch_size)
