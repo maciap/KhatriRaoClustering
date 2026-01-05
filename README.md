@@ -32,6 +32,8 @@ Khatri-Rao clustering is a paradigm extending existing prototype-based clusterin
   - `KRkmeansExperimentsLib.py`: utilities for k-means experiments.
   - `KRDeepExperimentsLib.py`: utilities for deep clustering experiments.
 
+- 📎`Appendix.pdf`: appendix containing additional dataset descriptions, implementation details and additional technical details.
+
 ## ✏️ Minimal example
 ```python
 from kr_k_means import KrKMeans
