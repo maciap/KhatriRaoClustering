@@ -19,7 +19,9 @@ This code implements the extensions to the Khatri-Rao paradigm of the standard k
 
 ## 📁 Repository contents 
 - `KathriRaokMeans/`
-   - `kr_k_means.py`: implements the Khatri-Rao k-means algorithm. 
+   - `kr_k_means_space_efficient.py`: space-efficient implementation of the Khatri-Rao k-means algorithm (default). 
+   - `kr_k_means_time_efficient.py`: time-efficient implementation of the Khatri-Rao k-means algorithm. 
+   - `kr_k_means_p_sets.py`: implements the Khatri-Rao k-means algorithm with an arbitrary number of protocentroids. 
    - `kr_k_means_utils.py`: utilities for the Khatri-Rao k-means algorithm.
 
 - `KhatriRaoDeepClustering/`
