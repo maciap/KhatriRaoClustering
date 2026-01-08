@@ -47,7 +47,7 @@ There repository also includes scripts to reproduce experiments.
 
 
 
-- 📎`Appendix.pdf`: appendix containing additional dataset descriptions, implementation details and additional technical details.
+- 📎`Appendix.pdf`: appendix containing additional dataset descriptions, implementation details, additional experiments and additional technical details.
 
 ## ✏️ Minimal example
 ```python
