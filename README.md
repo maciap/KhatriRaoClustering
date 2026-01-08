@@ -3,7 +3,7 @@
 This code implements the Khatri-Rao clustering algorithms introduced in the paper "Khatri-Rao Clustering for Data Summarization". 
 The code is written in Python 3. 
 
-Khatri-Rao clustering is a paradigm extending existing centroid-based clustering algorithms to achieve higher compression rates.  Khatri-Rao clustering algorithms can find more succinct yet equally accurate dataset reparameterization compared to standard clustering algorithms. 
+Khatri-Rao clustering is a paradigm extending existing centroid-based clustering algorithms to achieve higher compression rates.  Khatri-Rao clustering algorithms can find more succinct yet equally accurate data summaries compared to standard clustering algorithms. 
 
 This code implements the extensions to the Khatri-Rao paradigm of the standard k-means algorithm and of two deep clustering algorithms, deep k-means (DKM), and improved deep embedded clustering (IDEC). 
 
