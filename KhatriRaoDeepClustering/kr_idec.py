@@ -10,7 +10,7 @@ from clustpy.deep.dec import _DEC_Module, _dec_predict, _dec_compression_loss_fn
 import os 
 import sys 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from KathriRaokMeans.kr_k_means import KrKMeans
+from KathriRaokMeans.kr_k_means_space_efficient import KrKMeans
 from clustpy.utils import plot_with_transformation
 import tqdm
 

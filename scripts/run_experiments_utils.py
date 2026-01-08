@@ -276,10 +276,10 @@ def load_data(dataset):
     elif dataset == "double_mnist": 
         X, L = concatenate_mnist(n_samples=25000)
 
-    elif dataset == "r15":
+    elif dataset == "h15":
         data_path = os.path.expanduser("clustering-data-v1")
         battery = "sipu"
-        dataset_name = "r15"
+        dataset_name = "h15"
         b = clustbench.load_dataset(battery, dataset_name, path=data_path)
         X = b.data
         Lpre = b.labels[0]
@@ -304,7 +304,7 @@ def load_data(dataset):
         X, L = generate_classification() 
 
     else: 
-        print("Wrong input dataset. Dataset must be one of optdigits, mnist, cmu_faces, stickfigures, har, olivetti_faces, symbols, soybean_large, double_mnist, r15, chameleon_t7_10k, blobs, swiss_roll or classification.")  
+        print("Wrong input dataset. Dataset must be one of optdigits, mnist, cmu_faces, stickfigures, har, olivetti_faces, symbols, soybean_large, double_mnist, h15, chameleon_t7_10k, blobs, swiss_roll or classification.")  
         sys.exit(0) 
 
     return X,L 

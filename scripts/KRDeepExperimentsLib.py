@@ -10,8 +10,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from KhatriRaoDeepClustering.kr_dkm import KR_DKM 
 from KhatriRaoDeepClustering.kr_idec import KR_IDEC 
 from run_experiments_utils import compute_inertia
-
-
+from clustpy.metrics import purity 
 
 
 def run_deep_clustering_experiment(X,L,algo_name,  n_clusters1, n_clusters2, had_ae, ae, nrep, batch_size): 
@@ -86,13 +85,14 @@ def run_deep_clustering_experiment(X,L,algo_name,  n_clusters1, n_clusters2, had
         my_ari = ari(L, algo.labels_)
         my_acc = acc(L, algo.labels_)
         my_nmi = nmi(L, algo.labels_)
+        my_purity = purity(L, algo.labels_)
 
         # inertia monitoring 
         X_transformed = algo.transform(X) 
         inert = compute_inertia(X_transformed, algo.labels_, algo.cluster_centers_)
         if inert < best_inertia:
             best_inertia = inert
-            best_ari, best_acc, best_nmi = my_ari, my_acc, my_nmi
+            best_ari, best_acc, best_nmi, best_purity = my_ari, my_acc, my_nmi, my_purity
             best_time = elapsed_time
 
     # results 
@@ -100,6 +100,7 @@ def run_deep_clustering_experiment(X,L,algo_name,  n_clusters1, n_clusters2, had
         "ARI": best_ari,
         "ACC": best_acc,
         "NMI": best_nmi,
+        "purity": best_purity,
         "elapsed_time": best_time
     }
 

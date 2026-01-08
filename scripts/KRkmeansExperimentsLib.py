@@ -3,13 +3,14 @@ import numpy as np
 import sys 
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from KathriRaokMeans import kr_k_means
+from KathriRaokMeans import kr_k_means_space_efficient as kr_k_means
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import normalized_mutual_info_score as nmi, adjusted_rand_score as ari
 from clustpy.metrics import unsupervised_clustering_accuracy as acc
 import pickle
 from collections import defaultdict
+from clustpy.metrics import purity 
 
 
 def makerealdata(n,c,m,noise=0.0, zeroone=False):
@@ -71,7 +72,7 @@ def half_kron_rows(mat1, mat2):
 
     Returns
     -------
-    out : np.ndarray (matrix of shape (r1 * r2, m) where each row is mat1[i, :] * mat2[j, :])
+    out : np.ndarray (matrix of shape (h1 * h2, m) where each row is mat1[i, :] * mat2[j, :])
     '''
 
     out=np.zeros(shape=(mat1.shape[0]*mat2.shape[0], mat1.shape[1]))
@@ -84,31 +85,31 @@ def half_kron_rows(mat1, mat2):
     return out 
             
 
-def create_idx_map(r1,r2): 
+def create_idx_map(h1,h2): 
     '''
     Create a mapping between 2D index pairs and their flattened linear index.
 
     Parameters
     ----------
-    r1 : int (cardinality of first set of semicentroids)
-    r2 : int (cardinality of second set of semicentroids)
+    h1 : int (cardinality of first set of semicentroids)
+    h2 : int (cardinality of second set of semicentroids)
 
     Returns
     -------
-    map_idxs : dict (dictionary mapping (i, j) → linear index in range [0, r1 * r2 - 1])
+    map_idxs : dict (dictionary mapping (i, j) → linear index in range [0, h1 * h2 - 1])
     '''
 
     map_idxs = dict() 
     cnt=0 
-    for i in range(r1): 
-        for j in range(r2): 
+    for i in range(h1): 
+        for j in range(h2): 
             map_idxs[(i,j)] = cnt 
             cnt+=1 
             
     return map_idxs
 
 
-def coordinate_descent_half_kron(B_centroids, r1, r2,   T = 5000): 
+def coordinate_descent_half_kron(B_centroids, h1, h2,   T = 5000): 
     '''  gradient  descent to find B_1 and B_2 for a given Khatri-Rao product B
     
     Parameters:
@@ -131,23 +132,23 @@ def coordinate_descent_half_kron(B_centroids, r1, r2,   T = 5000):
     all_diffs2 = [] # L2 norm loss
     
     m = B_centroids.shape[1]
-    B_1 = makerealdata_v2(r1,m) # randomly initializing one factor (using low rank here- might be not needed) 
-    B_2 = makerealdata_v2(r2,m)  # other factor initialized as full rank D / D_1 
+    B_1 = makerealdata_v2(h1,m) # randomly initializing one factor (using low rank here- might be not needed) 
+    B_2 = makerealdata_v2(h2,m)  # other factor initialized as full rank D / D_1 
    
-    map_idx1 = create_idx_map(r1, r2) 
+    map_idx1 = create_idx_map(h1, h2) 
 
     for t in range(T): 
         
         # update B_1 
-        for i in range(r1): 
+        for i in range(h1): 
             for h in range(m):    
-                B_1[i,h] = np.sum([ (B_centroids[map_idx1[i,j], h] * B_2[j,h]  ) for j in range(r2)] ) / (np.sum( [ (B_2[j,h])**2 for j in range(r2)] ) + 1e-8)
+                B_1[i,h] = np.sum([ (B_centroids[map_idx1[i,j], h] * B_2[j,h]  ) for j in range(h2)] ) / (np.sum( [ (B_2[j,h])**2 for j in range(h2)] ) + 1e-8)
         
         
         # update B_2 
-        for j in range(r2): 
+        for j in range(h2): 
             for h in range(m):    
-                B_2[j,h] = np.sum([ (B_centroids[map_idx1[i,j],h] * B_1[i,h]) for i in range(r1)] ) / (np.sum( [ (B_1[i,h])**2 for i in range(r1)] ) + 1e-8)
+                B_2[j,h] = np.sum([ (B_centroids[map_idx1[i,j],h] * B_1[i,h]) for i in range(h1)] ) / (np.sum( [ (B_1[i,h])**2 for i in range(h1)] ) + 1e-8)
         
         
         # difference term in the gradient 
@@ -175,8 +176,8 @@ class PP_KRkmeans():
     Parameters
     ----------
     D : np.ndarray (input data matrix)
-    r1 : int (cardinality first set of protocentroids)
-    r2 : int (cardinality first set of protocentroids)
+    h1 : int (cardinality first set of protocentroids)
+    h2 : int (cardinality first set of protocentroids)
     standardize : bool, optional standardize the dataset before clustering (default: False)
     n_reps : int, optional
     lr : float, optional (learning rate)
@@ -184,13 +185,13 @@ class PP_KRkmeans():
     max_iter : int, optional (maximum number of iterations-default: 50) 
 
     '''
-    def __init__(self, D, r1, r2, standardize = False, n_reps = 10, lr = 0.01, n_epochs = 1000, max_iter = 50):
+    def __init__(self, D, h1, h2, standardize = False, n_reps = 10, lr = 0.01, n_epochs = 1000, max_iter = 50):
         if standardize: 
             scaler = StandardScaler()
             D = scaler.fit_transform(D)
         self.D = D.astype('float32') 
-        self.r1 = r1
-        self.r2 = r2 
+        self.h1 = h1
+        self.h2 = h2 
         self.n, self.m = D.shape
         self.lr = lr 
         self.n_epochs = n_epochs 
@@ -199,11 +200,11 @@ class PP_KRkmeans():
     
     def run_k_means(self): 
         ''' run k means ''' 
-        kmeans = KMeans(n_clusters=self.r1 * self.r2, n_init = self.n_reps,  init = "random", random_state=42)
+        kmeans = KMeans(n_clusters=self.h1 * self.h2, n_init = self.n_reps,  init = "random", random_state=42)
         kmeans.fit(self.D)
         self.labels = kmeans.labels_
         self.centroids = kmeans.cluster_centers_
-        assert self.centroids.shape == (self.r1 * self.r2,self.m)
+        assert self.centroids.shape == (self.h1 * self.h2,self.m)
         
     def compute_loss_v2(self): 
         ''' compute inertia 
@@ -225,7 +226,7 @@ class PP_KRkmeans():
         
         
         '''
-        B_estimate, B1, B2 = coordinate_descent_half_kron(self.centroids, r1=self.r1, r2= self.r2,  T = self.n_epochs)
+        B_estimate, B1, B2 = coordinate_descent_half_kron(self.centroids, h1=self.h1, h2= self.h2,  T = self.n_epochs)
         self.estimated_centroids = B_estimate 
         
         # Compute squared Euclidean distances
@@ -300,7 +301,7 @@ def run_kr_k_means(X, n_clusters_1, n_clusters_2, n_reps=20, init_type = "random
     best_assignments : np.ndarray (final cluster assignments for each sample) 
     '''
           
-    dKM = kr_k_means.KrKMeans(X, r1=n_clusters_1, r2=n_clusters_2, standardize = False, operator = operator)
+    dKM = kr_k_means.KrKMeans(X, h1=n_clusters_1, h2=n_clusters_2, standardize = False, operator = operator)
     l_lowes_bs = float("inf")
     for _ in range(n_reps):
         ABs, l, assignments  = dKM.fit(n_iter =  200, th_movement = 0.0001,  verbose = False, init_type =init_type)
@@ -338,7 +339,6 @@ def run_k_means_baseline(X, n_clusters, n_reps=20):
     return loss, centroids, labels
 
 
-
 def compute_metrics(labels, actual_labels): 
     '''
     Compute clustering performance metrics (ARI, ACC, NMI).
@@ -350,11 +350,11 @@ def compute_metrics(labels, actual_labels):
 
     Returns
     -------
-    metrics : dict (dictionary containing Adjusted Rand Index (ARI), Accuracy (ACC), and Normalized Mutual Information (NMI)) 
+    metrics : dict (dictionary containing Adjusted Rand Index (ARI), Accuracy (ACC), Normalized Mutual Information (NMI)) and purity 
     '''
 
     my_ari = ari(actual_labels, labels)
     my_acc = acc(actual_labels,labels)
     my_nmi = nmi(actual_labels, labels)
-    return {"ARI": my_ari, "ACC": my_acc, "NMI": my_nmi}
-
+    my_purity = purity(actual_labels, labels)
+    return {"ARI": my_ari, "ACC": my_acc, "NMI": my_nmi, "PURITY": my_purity}

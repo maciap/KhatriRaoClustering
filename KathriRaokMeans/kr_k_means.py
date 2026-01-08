@@ -6,20 +6,20 @@ from .kr_k_means_utils import find_current_centers, compute_loss, compute_centro
 from scipy.spatial.distance import cdist
 
 class KrKMeans(): 
-    def __init__(self, D, r1, r2, standardize = True, operator = "product"):
+    def __init__(self, D, h1, h2, standardize = True, operator = "product"):
         '''
         KrKMeans implements Khatri-Rao K-means for two sets of protocentroids 
         D: input data (np.ndarray)
-        r1: number of protocentroids in the first group (int) 
-        r2: number of protocentroids in the second group (int) 
+        h1: number of protocentroids in the first group (int) 
+        h2: number of protocentroids in the second group (int) 
         standardize: whether to compute z-scores or not (bool) 
         '''
         if standardize: 
             scaler = StandardScaler()
             D = scaler.fit_transform(D)
         self.D = D.astype('float32') 
-        self.r1 = r1 
-        self.r2 = r2 
+        self.h1 = h1 
+        self.h2 = h2 
         self.n, self.m = D.shape
         assert operator in ["product", "sum"], f"operator must be 'sum' or 'product' but is {operator}"
         self.operator = operator
@@ -43,14 +43,14 @@ class KrKMeans():
         centroid1 =  self.D[random.randrange(len(self.D))]  
         centroid2 = centroid/ centroid1
 
-        B1 = np.zeros((self.r1, self.m))
-        B2 = np.zeros((self.r2, self.m))
+        B1 = np.zeros((self.h1, self.m))
+        B2 = np.zeros((self.h2, self.m))
 
         B1[0,:] = centroid1
         B2[0,:] = centroid2
 
-        for c1 in range(self.r1):
-            for c2 in range(self.r2): 
+        for c1 in range(self.h1):
+            for c2 in range(self.h2): 
 
                 # Get the squared distance between that centroid and each sample in the dataset
                 squared_distances = np.array([min([np.inner(cd - sample, cd - sample) for cd in centroids]) for sample in self.D])
@@ -102,15 +102,15 @@ class KrKMeans():
         centroid1 = self.D[random.randrange(len(self.D))]  #np.random.rand(self.m)
         centroid2 = centroid / centroid1
   
-        B1 = np.zeros((self.r1, self.m))
-        B2 = np.zeros((self.r2, self.m))
+        B1 = np.zeros((self.h1, self.m))
+        B2 = np.zeros((self.h2, self.m))
               
         B1[0,:] = centroid1
         B2[0,:] = centroid2
     
         # For each cluster
-        for c1 in range(self.r1):
-            for c2 in range(self.r2): 
+        for c1 in range(self.h1):
+            for c2 in range(self.h2): 
     
                 # Get the squared distance between that centroid and each sample in the dataset
                 squared_distances = np.array([min([np.inner(cnd - sample,cnd - sample) for cnd in centroids]) for sample in self.D])
@@ -157,11 +157,11 @@ class KrKMeans():
         Returns:
         B1, B2 (ndarray): Initial  protocentroids
         """
-        B_1 = np.zeros((self.r1, self.m))
-        B_2 = np.zeros((self.r2, self.m))
+        B_1 = np.zeros((self.h1, self.m))
+        B_2 = np.zeros((self.h2, self.m))
 
         # initialize by picking random data points 
-        for i in range(self.r1): 
+        for i in range(self.h1): 
             row_index = np.random.choice(self.n)
             # get the selected row
             selected_row = self.D[row_index]
@@ -169,7 +169,7 @@ class KrKMeans():
             B_1[i,:] = selected_row 
             #
             #
-        for j in range(self.r2): 
+        for j in range(self.h2): 
             row_index = np.random.choice(self.n)
             # get the selected row
             selected_row2 = self.D[row_index]
@@ -187,8 +187,8 @@ class KrKMeans():
         Returns:
         B1, B2 (ndarray): Initial  protocentroids
         """
-        B_1 = np.ones((self.r1, self.m))
-        B_2 = np.ones((self.r2, self.m))
+        B_1 = np.ones((self.h1, self.m))
+        B_2 = np.ones((self.h2, self.m))
         return B_1, B_2
         
     def init_zeros(self): 
@@ -198,8 +198,8 @@ class KrKMeans():
         Returns:
         B1, B2 (ndarray): Initial protocentroids
         """
-        B_1 = np.zeros((self.r1, self.m))
-        B_2 = np.zeros((self.r2, self.m))
+        B_1 = np.zeros((self.h1, self.m))
+        B_2 = np.zeros((self.h2, self.m))
         return B_1, B_2
         
     
@@ -212,7 +212,7 @@ class KrKMeans():
          ''' 
         distances = cdist(D, self.allcenters)
         indices_best = np.argmin(distances, axis=1)
-        return (indices_best // self.r2).flatten() , (indices_best % self.r2).flatten() , indices_best
+        return (indices_best // self.h2).flatten() , (indices_best % self.h2).flatten() , indices_best
 
     
     def update_A(self, indices, r): 
@@ -276,8 +276,8 @@ class KrKMeans():
         Returns: 
         updated first set of protocentroids (ndarray)
         '''
-        B = np.zeros((self.r1, self.m)) 
-        for i in range(self.r1): 
+        B = np.zeros((self.h1, self.m)) 
+        for i in range(self.h1): 
             idxs = np.where(indices == i)[0] # data points belonging to cluster i 
             # if at least one observation is assigned to each cluster, update, otherwise this is useless centroid
             if len(idxs) > 0: 
@@ -299,8 +299,8 @@ class KrKMeans():
         Returns: 
         updated first set of protocentroids (ndarray)
         '''
-        B = np.zeros((self.r2, self.m)) 
-        for i in range(self.r2): 
+        B = np.zeros((self.h2, self.m)) 
+        for i in range(self.h2): 
             idxs = np.where(indices == i)[0] # data points belonging to cluster i 
             # if at least one observation is assigned to each cluster, update, otherwise this is useless centroid
             if len(idxs) > 0: 
@@ -346,19 +346,19 @@ class KrKMeans():
             B_1 , B_2 = self.random_inizialization_B() 
     
         
-        self.allcenters = np.full((self.r1 * self.r2, self.m), np.inf, dtype="float32")
+        self.allcenters = np.full((self.h1 * self.h2, self.m), np.inf, dtype="float32")
         
         for itr in range(n_iter): 
             
             # update centroids 
             self.previous_allcenters = np.copy(self.allcenters) 
-            all_centers = find_current_centers(B_1,B_2, self.r1, self.r2, self.m, self.operator)  
+            all_centers = find_current_centers(B_1,B_2, self.h1, self.h2, self.m, self.operator)  
             self.allcenters = all_centers
 
             # update assignments 
             indices_B_1, indices_B_2, idxs_all = self.find_cluster_membership(self.D) 
-            A_1 = self.update_A(indices_B_1, self.r1) 
-            A_2 = self.update_A(indices_B_2, self.r2) 
+            A_1 = self.update_A(indices_B_1, self.h1) 
+            A_2 = self.update_A(indices_B_2, self.h2) 
             
             self.A_1 = A_1 
             self.A_2 = A_2 
