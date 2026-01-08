@@ -7,6 +7,8 @@ Khatri-Rao clustering is a paradigm extending existing centroid-based clustering
 
 This code implements the extensions to the Khatri-Rao paradigm of the standard k-means algorithm and of two deep clustering algorithms, deep k-means (DKM), and improved deep embedded clustering (IDEC). 
 
+There repository also includes scripts to reproduce experiments. 
+
 ![Example](stickfigures.png)
 
 
@@ -29,7 +31,7 @@ This code implements the extensions to the Khatri-Rao paradigm of the standard k
   - `kr_idec.py`: implements the Khatri-Rao IDEC deep clustering algorithm.
   - `deep_clustering_utils.py`: utilities for Khatri-Rao deep clustering algorithms.
 
-- `Scripts/`
+- `scripts/`
   - `run_k_means_experiments.py`: run experiments comparing standard and Khatri-Rao k-means clustering.
   - `run_deep_clustering_experiments.py`: run experiments comparing standard and Khatri-Rao deep clustering.
   - `run_experiments_utils.py`: general utilities for all experiments.
